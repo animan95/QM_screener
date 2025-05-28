@@ -22,12 +22,12 @@ A machine learning pipeline for predicting protein–ligand binding affinity usi
 .
 ├── data/                     # Input datasets (ligands, proteins, QM, etc.)
 ├── src/                      # Core pipeline scripts
-│   ├── train_model.py        # Training script for GNN + CNN models
-│   ├── predict_affinity.py   # Binding prediction for new ligand–protein pairs
-│   ├── cluster_ligands.py    # Clustering by structure
-│   ├── viewer.py             # 3D viewer generation with py3Dmol
-│   └── pubchem_check.py      # PubChem novelty check
-├── top_hits.csv              # Final 200 predicted ligand–protein pairs
+│   ├── tox_scr.py        # Runs toxicity screening on dataset
+│   ├── dl_scorer.py   # Gives drug likeness score
+│   ├── lig_filt.py    # Filters ligands based on toxicity, drug-likenes and QM properties
+│   ├── kib_inf.py     # Adds KIBA binding affinity score for each ligand-protein combination
+│   └── main.py     # Main script which runs the pipeline
+├── vis/            #Visualization tools to visualize final drug-like set
 └── README.md
 ```
 
@@ -43,37 +43,27 @@ pip install torch pandas rdkit py3Dmol biopython scikit-learn requests
 
 ## 🧪 Running the Pipeline
 
-1. **Filter ligands** by QM, toxicity, and drug-likeness:
+1. **Filter ligands** by QM, toxicity, and drug-likeness and predict binding scores**:
    ```bash
-   python src/filter_ligands.py
+   python src/main.py
    ```
 
-2. **Prepare ligand–protein combinations**:
+2. **Cluster and visualize hits**:
    ```bash
-   python src/make_combinations.py
+   python src/clust_lig.py
+   python src/lig_vwr.py
    ```
 
-3. **Predict binding scores**:
+3. **Check novelty against PubChem**:
    ```bash
-   python src/predict_affinity.py
-   ```
-
-4. **Cluster and visualize hits**:
-   ```bash
-   python src/cluster_ligands.py
-   python src/viewer.py
-   ```
-
-5. **Check novelty against PubChem**:
-   ```bash
-   python src/pubchem_check.py
+   python vis/nov_look.py
    ```
 
 ---
 
 ## 📊 Example Output
 
-- `top_hits.csv` with SMILES, sequences, predicted KIBA scores, QM features
+- `top20_filtered_hits.csv` with SMILES, sequences, predicted KIBA scores, QM features
 - `protein_ligand_html/index.html` for browsing 3D visualizations
 - `cluster_plot.png` showing ligand clustering
 
