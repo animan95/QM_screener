@@ -1,0 +1,3 @@
+Extract the QMugs data set using this command:
+
+wget --content-disposition "https://libdrive.ethz.ch/index.php/s/X5vOBNSITAG5vzM/download?path=%2F&files=summary.csv"
